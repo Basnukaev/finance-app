@@ -1,0 +1,46 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+  redis_data:
+
+services:
+  postgres:
+    image: postgres:15.5
+    hostname: postgres
+    container_name: postgres
+    restart: no
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_INSIDE_DOCKER_PORT}"
+
+  redis:
+    image: redis:7.2.4
+    hostname: redis
+    container_name: redis
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    restart: no
+    volumes:
+      - redis_data:/var/lib/redis
+    # - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    env_file:
+      - .env
+    ports:
+      - "${REDIS_PORT}:${REDIS_INSIDE_DOCKER_PORT}"
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    hostname: redis-commander
+    container_name: redis-commander
+    restart: no
+    environment:
+      REDIS_HOST: redis
+    env_file:
+      - .env
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis

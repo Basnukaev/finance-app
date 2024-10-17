@@ -1,0 +1,40 @@
+application:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:finance-app-db}
+    username: ${POSTGRES_USER:postgresql}
+    password: ${POSTGRES_PASSWORD:postgresql}
+    driver-class-name: org.postgresql.Driver
+
+spring:
+  application:
+    name: finance-app
+
+  datasource:
+    url: ${application.datasource.url}
+    username: ${application.datasource.username}
+    password: ${application.datasource.password}
+    driver-class-name: ${application.datasource.driver-class-name}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: false
+
+  flyway:
+    url: ${application.datasource.url}
+    user: ${application.datasource.username}
+    password: ${application.datasource.password}
+    driver-class-name: ${application.datasource.driver-class-name}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  jackson:
+    default-property-inclusion: non_null
+
+  data:
+    redis:
+      client-type: jedis
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:redis}

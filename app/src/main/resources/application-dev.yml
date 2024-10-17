@@ -1,0 +1,8 @@
+logging:
+  level:
+    jdbc.audit: off
+    jdbc.sqlonly: off
+    jdbc.resultset: off
+    jdbc.connection: off
+    jdbc.sqltiming: info
+    jdbc.resultsettable: trace
